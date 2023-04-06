@@ -181,12 +181,12 @@ public class TrainService {
 //            String et = endTime.toString().substring(0,5);
 //            LocalTime end = LocalTime.parse(et);
             LocalTime departureTime = t.getDepartureTime();
-            departureTime.minusSeconds(departureTime.getSecond());
-            departureTime.minusNanos(departureTime.getNano());
-            startTime.minusSeconds(startTime.getSecond());
-            startTime.minusNanos(startTime.getNano());
-            endTime.minusSeconds(endTime.getSecond());
-            endTime.minusNanos(endTime.getNano());
+            departureTime = departureTime.minusSeconds(departureTime.getSecond());
+            departureTime = departureTime.minusNanos(departureTime.getNano());
+            startTime = startTime.minusSeconds(startTime.getSecond());
+            startTime = startTime.minusNanos(startTime.getNano());
+            endTime = endTime.minusSeconds(endTime.getSecond());
+            endTime = endTime.minusNanos(endTime.getNano());
             if(departureTime.equals(startTime) || departureTime.equals(endTime) || (departureTime.isAfter(startTime) && departureTime.isBefore(endTime))){
                 ans.add(t.getTrainId());
             }
