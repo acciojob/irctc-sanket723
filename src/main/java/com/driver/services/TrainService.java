@@ -174,25 +174,31 @@ public class TrainService {
         List<Integer> ans = new ArrayList<>();
 
         for(Train t : newTrainList){
-//            String time = t.getDepartureTime().toString().substring(0,5);
-//            LocalTime departureTime = LocalTime.parse(time);
-//            String st = startTime.toString().substring(0,5);
-//            LocalTime start = LocalTime.parse(st);
-//            String et = endTime.toString().substring(0,5);
-//            LocalTime end = LocalTime.parse(et);
-            LocalTime departureTime = t.getDepartureTime();
-            departureTime = departureTime.minusSeconds(departureTime.getSecond());
-            departureTime = departureTime.minusNanos(departureTime.getNano());
-            startTime = startTime.minusSeconds(startTime.getSecond());
-            startTime = startTime.minusNanos(startTime.getNano());
-            endTime = endTime.minusSeconds(endTime.getSecond());
-            endTime = endTime.minusNanos(endTime.getNano());
-            if(departureTime.equals(startTime) || departureTime.equals(endTime) || (departureTime.isAfter(startTime) && departureTime.isBefore(endTime))){
-                ans.add(t.getTrainId());
-            }
+//            LocalTime departureTime = t.getDepartureTime();
+//            departureTime = departureTime.minusSeconds(departureTime.getSecond());
+//            departureTime = departureTime.minusNanos(departureTime.getNano());
+//            startTime = startTime.minusSeconds(startTime.getSecond());
+//            startTime = startTime.minusNanos(startTime.getNano());
+//            endTime = endTime.minusSeconds(endTime.getSecond());
+//            endTime = endTime.minusNanos(endTime.getNano());
+//
+//            if(departureTime.equals(startTime) || departureTime.equals(endTime) || (departureTime.isAfter(startTime) && departureTime.isBefore(endTime))){
+//                ans.add(t.getTrainId());
+//            }
+
 //            if(t.getDepartureTime().equals(startTime) || t.getDepartureTime().equals(endTime) || (t.getDepartureTime().isAfter(startTime) && t.getDepartureTime().isBefore(endTime))){
 //                ans.add(t.getTrainId());
 //            }
+
+            int startTimeInMin = (startTime.getHour() * 60) + startTime.getMinute();
+            int lastTimeInMin = (endTime.getHour() * 60) + endTime.getMinute();
+
+
+            int departureTimeInMin = (t.getDepartureTime().getHour() * 60) + t.getDepartureTime().getMinute();
+            int reachingTimeInMin  = departureTimeInMin + (t.getRoute().length()-1  * 60);
+            if(reachingTimeInMin>=startTimeInMin && reachingTimeInMin<=lastTimeInMin)
+                ans.add(t.getTrainId());
+
         }
 
         return ans;
