@@ -174,8 +174,11 @@ public class TrainService {
         List<Integer> ans = new ArrayList<>();
 
         for(Train t : newTrainList){
-            String time = t.getDepartureTime().toString().substring(0,6);
+            String time = t.getDepartureTime().toString().substring(0,5);
             LocalTime departureTime = LocalTime.parse(time);
+//            String st = startTime.toString().substring(0,5);
+//            LocalTime start = LocalTime.parse(st);
+            //LocalTime start = startTime.minusSeconds(startTime.getSecond())
             if(departureTime.equals(startTime) || departureTime.equals(endTime) || (departureTime.isAfter(startTime) && departureTime.isBefore(endTime))){
                 ans.add(t.getTrainId());
             }
