@@ -174,14 +174,20 @@ public class TrainService {
         List<Integer> ans = new ArrayList<>();
 
         for(Train t : newTrainList){
-            String time = t.getDepartureTime().toString().substring(0,5);
-            LocalTime departureTime = LocalTime.parse(time);
-            String st = startTime.toString().substring(0,5);
-            LocalTime start = LocalTime.parse(st);
-            String et = endTime.toString().substring(0,5);
-            LocalTime end = LocalTime.parse(et);
-            //LocalTime start = startTime.minusSeconds(startTime.getSecond())
-            if(departureTime.equals(start) || departureTime.equals(end) || (departureTime.isAfter(start) && departureTime.isBefore(end))){
+//            String time = t.getDepartureTime().toString().substring(0,5);
+//            LocalTime departureTime = LocalTime.parse(time);
+//            String st = startTime.toString().substring(0,5);
+//            LocalTime start = LocalTime.parse(st);
+//            String et = endTime.toString().substring(0,5);
+//            LocalTime end = LocalTime.parse(et);
+            LocalTime departureTime = t.getDepartureTime();
+            departureTime.minusSeconds(departureTime.getSecond());
+            departureTime.minusNanos(departureTime.getNano());
+            startTime.minusSeconds(startTime.getSecond());
+            startTime.minusNanos(startTime.getNano());
+            endTime.minusSeconds(endTime.getSecond());
+            endTime.minusNanos(endTime.getNano());
+            if(departureTime.equals(startTime) || departureTime.equals(endTime) || (departureTime.isAfter(startTime) && departureTime.isBefore(endTime))){
                 ans.add(t.getTrainId());
             }
 //            if(t.getDepartureTime().equals(startTime) || t.getDepartureTime().equals(endTime) || (t.getDepartureTime().isAfter(startTime) && t.getDepartureTime().isBefore(endTime))){
