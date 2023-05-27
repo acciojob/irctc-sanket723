@@ -14,6 +14,7 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 public class TrainService {
@@ -145,7 +146,7 @@ public class TrainService {
         return oldestAge;
     }
 
-    public List<Integer> trainsBetweenAGivenTime(Station station, LocalTime startTime, LocalTime endTime){
+    public List<Integer> trainsBetweenAGivenTime(Station station, LocalTime startTime, LocalTime endTime) {
 
         //When you are at a particular station you need to find out the number of trains that will pass through a given station
         //between a particular time frame both start time and end time included.
@@ -153,55 +154,58 @@ public class TrainService {
         //in problem statement)
         //You can also assume the seconds and milli seconds value will be 0 in a LocalTime format.
 
-        List<Train> trainList = trainRepository.findAll();
-
-        //make new train list with route from given station
-        List<Train> newTrainList = new ArrayList<>();
-
-        for(Train t : trainList){
-            String route = t.getRoute();
-            String[] str = route.split(",");
-
-            for(String s : str){
-                if(s.equals(station.toString())){
-                    newTrainList.add(t);
-                    break;
-                }
-            }
-        }
-
-
-        List<Integer> ans = new ArrayList<>();
-
-        for(Train t : newTrainList){
-//            LocalTime departureTime = t.getDepartureTime();
-//            departureTime = departureTime.minusSeconds(departureTime.getSecond());
-//            departureTime = departureTime.minusNanos(departureTime.getNano());
-//            startTime = startTime.minusSeconds(startTime.getSecond());
-//            startTime = startTime.minusNanos(startTime.getNano());
-//            endTime = endTime.minusSeconds(endTime.getSecond());
-//            endTime = endTime.minusNanos(endTime.getNano());
+        // MY LOGIC NOT PASSING ASK IN DOUBT
+//        List<Train> trainList = trainRepository.findAll();
 //
-//            if(departureTime.equals(startTime) || departureTime.equals(endTime) || (departureTime.isAfter(startTime) && departureTime.isBefore(endTime))){
-//                ans.add(t.getTrainId());
+//        //make new train list with route from given station
+//        List<Train> newTrainList = new ArrayList<>();
+//
+//        for(Train t : trainList){
+//            String route = t.getRoute();
+//            String[] str = route.split(",");
+//
+//            for(String s : str){
+//                if(s.equals(station.toString())){
+//                    newTrainList.add(t);
+//                    break;
+//                }
 //            }
-
+//        }
+//
+//
+//        List<Integer> ans = new ArrayList<>();
+//
+//        for(Train t : newTrainList){
+//
 //            if(t.getDepartureTime().equals(startTime) || t.getDepartureTime().equals(endTime) || (t.getDepartureTime().isAfter(startTime) && t.getDepartureTime().isBefore(endTime))){
 //                ans.add(t.getTrainId());
 //            }
+//
+//        }
+//
+//        return ans;
+//    }
 
-            int startTimeInMin = (startTime.getHour() * 60) + startTime.getMinute();
-            int lastTimeInMin = (endTime.getHour() * 60) + endTime.getMinute();
+
+        List<Integer> TrainList = new ArrayList<>();
+        List<Train> trains = trainRepository.findAll();
+        for (Train t : trains) {
+            String s = t.getRoute();
+            String[] ans = s.split(",");
+            for (int i = 0; i < ans.length; i++) {
+                if (Objects.equals(ans[i], String.valueOf(station))) {
+                    int startTimeInMin = (startTime.getHour() * 60) + startTime.getMinute();
+                    int lastTimeInMin = (endTime.getHour() * 60) + endTime.getMinute();
 
 
-            int departureTimeInMin = (t.getDepartureTime().getHour() * 60) + t.getDepartureTime().getMinute();
-            int reachingTimeInMin  = departureTimeInMin + (t.getRoute().length()-1  * 60);
-            if(reachingTimeInMin>=startTimeInMin && reachingTimeInMin<=lastTimeInMin)
-                ans.add(t.getTrainId());
-
+                    int departureTimeInMin = (t.getDepartureTime().getHour() * 60) + t.getDepartureTime().getMinute();
+                    int reachingTimeInMin = departureTimeInMin + (i * 60);
+                    if (reachingTimeInMin >= startTimeInMin && reachingTimeInMin <= lastTimeInMin)
+                        TrainList.add(t.getTrainId());
+                }
+            }
         }
-
-        return ans;
+        return TrainList;
     }
 
 }
